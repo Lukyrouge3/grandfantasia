@@ -2,7 +2,7 @@ import fs from 'fs';
 import iconv from 'iconv-lite';
 
 export const gfParse = (path: string) => {
-    const ini = iconv.decode(fs.readFileSync(path), 'big5');
+    const ini = iconv.decode(fs.readFileSync(path), 'win1252');
     const lines = ini.split("\|\r\n");
     if (!lines) throw new Error('No lines found in file');
     // lines.shift();
