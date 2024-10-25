@@ -97,8 +97,8 @@ export type Database = {
           icon_filename: string | null
           id: number
           int: number | null
-          item_group: number | null
-          item_quality: number | null
+          item_group: string | null
+          item_quality: string | null
           item_type: number | null
           limit_type: number | null
           log_level: number | null
@@ -116,6 +116,7 @@ export type Database = {
           model_filename: string | null
           model_id: string | null
           name: string | null
+          name_translation_id: string
           op_flags: number | null
           op_flags_plus: number | null
           physical_critical_damage: number | null
@@ -144,6 +145,7 @@ export type Database = {
           sys_price: number | null
           target: number | null
           tip: string | null
+          tip_translation_id: string
           treasure_buffs1: number | null
           treasure_buffs2: number | null
           treasure_buffs3: number | null
@@ -192,8 +194,8 @@ export type Database = {
           icon_filename?: string | null
           id: number
           int?: number | null
-          item_group?: number | null
-          item_quality?: number | null
+          item_group?: string | null
+          item_quality?: string | null
           item_type?: number | null
           limit_type?: number | null
           log_level?: number | null
@@ -211,6 +213,7 @@ export type Database = {
           model_filename?: string | null
           model_id?: string | null
           name?: string | null
+          name_translation_id: string
           op_flags?: number | null
           op_flags_plus?: number | null
           physical_critical_damage?: number | null
@@ -239,6 +242,7 @@ export type Database = {
           sys_price?: number | null
           target?: number | null
           tip?: string | null
+          tip_translation_id: string
           treasure_buffs1?: number | null
           treasure_buffs2?: number | null
           treasure_buffs3?: number | null
@@ -287,8 +291,8 @@ export type Database = {
           icon_filename?: string | null
           id?: number
           int?: number | null
-          item_group?: number | null
-          item_quality?: number | null
+          item_group?: string | null
+          item_quality?: string | null
           item_type?: number | null
           limit_type?: number | null
           log_level?: number | null
@@ -306,6 +310,7 @@ export type Database = {
           model_filename?: string | null
           model_id?: string | null
           name?: string | null
+          name_translation_id?: string
           op_flags?: number | null
           op_flags_plus?: number | null
           physical_critical_damage?: number | null
@@ -334,6 +339,7 @@ export type Database = {
           sys_price?: number | null
           target?: number | null
           tip?: string | null
+          tip_translation_id?: string
           treasure_buffs1?: number | null
           treasure_buffs2?: number | null
           treasure_buffs3?: number | null
@@ -345,96 +351,41 @@ export type Database = {
           weapon_effect_id?: number | null
           will?: number | null
         }
-        Relationships: []
-      }
-      item_name_translation: {
-        Row: {
-          en: string | null
-          es: string | null
-          fr: string | null
-          id: number
-          item_id: number
-          pt: string | null
-        }
-        Insert: {
-          en?: string | null
-          es?: string | null
-          fr?: string | null
-          id?: number
-          item_id: number
-          pt?: string | null
-        }
-        Update: {
-          en?: string | null
-          es?: string | null
-          fr?: string | null
-          id?: number
-          item_id?: number
-          pt?: string | null
-        }
         Relationships: [
           {
-            foreignKeyName: "item_translation_item_id_fkey"
-            columns: ["item_id"]
-            referencedRelation: "item"
+            foreignKeyName: "item_name_translation_id_fkey"
+            columns: ["name_translation_id"]
+            referencedRelation: "translation"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "item_tip_translation_id_fkey"
+            columns: ["tip_translation_id"]
+            referencedRelation: "translation"
             referencedColumns: ["id"]
           },
         ]
       }
-      item_tip_translation: {
-        Row: {
-          en: string | null
-          es: string | null
-          fr: string | null
-          id: number
-          item_id: number
-          pt: string | null
-        }
-        Insert: {
-          en?: string | null
-          es?: string | null
-          fr?: string | null
-          id?: number
-          item_id: number
-          pt?: string | null
-        }
-        Update: {
-          en?: string | null
-          es?: string | null
-          fr?: string | null
-          id?: number
-          item_id?: number
-          pt?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "item_tip_translation_item_id_fkey"
-            columns: ["item_id"]
-            referencedRelation: "item"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      text_translation: {
+      translation: {
         Row: {
           en: string
           es: string
           fr: string
-          id: number
+          id: string
           pt: string
         }
         Insert: {
           en?: string
           es?: string
           fr?: string
-          id?: number
+          id: string
           pt?: string
         }
         Update: {
           en?: string
           es?: string
           fr?: string
-          id?: number
+          id?: string
           pt?: string
         }
         Relationships: []

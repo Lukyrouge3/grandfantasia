@@ -8,27 +8,6 @@ import { createServerClient } from "@supabase/ssr";
 import type { Database } from "$lib/supabase";
 // import { loadTexts } from "$lib/gf/texts";
 
-if (process.env.NODE_ENV !== "development") {
-	console.log("Loading items...");
-	console.time("Items loaded");
-	const items = loadItems("C_Item.ini", "T_Item.ini");
-	storeItems(items).then(() => {
-		console.timeEnd("Items loaded");
-	});
-
-	console.time("Mall Items loaded");
-	const mall_items = loadItems("C_ItemMall.ini", "T_ItemMall.ini");
-	storeItems(mall_items).then(() => {
-		console.timeEnd("Mall Items loaded");
-	});
-
-	// console.time("Texts loaded");
-	// const texts = loadTexts("T_TextIndex.ini");
-	// storeTexts(Array.from(texts.values())).then(() => {
-	// 	console.timeEnd("Texts loaded");
-	// });
-}
-
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createServerClient<Database>(
 		PUBLIC_SUPABASE_URL,

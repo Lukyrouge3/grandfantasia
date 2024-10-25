@@ -1,27 +1,108 @@
-import type { Config } from 'tailwindcss';
-import flowbitePlugin from 'flowbite/plugin'
+import type { Config } from "tailwindcss";
+import flowbitePlugin from "flowbite/plugin";
 
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'],
-  darkMode: 'selector',
-  theme: {
-    extend: {
-      colors: {
-        // flowbite-svelte
-        primary: {
-          50: '#FFF5F2',
-          100: '#FFF1EE',
-          200: '#FFE4DE',
-          300: '#FFD5CC',
-          400: '#FFBCAD',
-          500: '#FE795D',
-          600: '#EF562F',
-          700: '#EB4F27',
-          800: '#CC4522',
-          900: '#A5371B'
-        }
-      }
-    }
-  },
-  plugins: [flowbitePlugin]
+	content: [
+		"./src/**/*.{html,js,svelte,ts}",
+		"./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}",
+	],
+	darkMode: "selector",
+	theme: {
+		extend: {
+			colors: {
+				// flowbite-svelte
+				primary: {
+					50: "#FFF5F2",
+					100: "#FFF1EE",
+					200: "#FFE4DE",
+					300: "#FFD5CC",
+					400: "#FFBCAD",
+					500: "#FE795D",
+					600: "#EF562F",
+					700: "#EB4F27",
+					800: "#CC4522",
+					900: "#A5371B",
+				},
+				"quality-0": "#fff",
+				"quality-1": "silver",
+				"quality-2": "#6deb21",
+				"quality-3": "#21abeb",
+				"quality-4": "#eb6d21",
+				"quality-5": "#ff0",
+				"quality-6": "#fc14ec",
+				"quality-7": "#e80806",
+				"color-0": "#fff",
+				"color-1": "#3c3c3c",
+				"color-2": "silver",
+				"color-3": "#a98871",
+				"color-4": "#6f5d8c",
+				"color-5": "#6696dd",
+				"color-6": "#799969",
+				"color-7": "#fbf177",
+				"color-8": "#ce5b67",
+				"color-9": "#e48c7e",
+				"color-10": "#604336",
+				"color-11": "#ffd1c5",
+				"color-12": "#f57a7c",
+				"color-13": "#9acdf7",
+				"color-14": "#ef8b73",
+				"color-15": "#bbe477",
+				"color-16": "#ab9adb",
+				"color-17": "#fff1e4",
+				"color-18": "#fde4dd",
+				"color-19": "#d6bb54",
+				"color-20": "#c09c74",
+				"color-21": "#9c7c69",
+				"color-22": "#d16447",
+				"color-23": "#805446",
+				"color-24": "#5f5f5f",
+				"color-25": "#474c6e",
+				"color-26": "#acacac",
+				"color-27": "silver",
+				"color-28": "#f7dc88",
+				"color-29": "#e0e177",
+				"color-30": "#f7e8a0",
+				"color-31": "#fbf177",
+				"color-32": "#e17774",
+				"color-33": "#643936",
+				"color-34": "#325c62",
+				"color-35": "#b0e172",
+				"color-36": "#c8e3af",
+				"color-37": "#ab9adb",
+				"color-38": "#645242",
+				"color-39": "#8d785f",
+				"color-40": "#4c4973",
+				"color-41": "#9acdf7",
+				"color-42": "#7a86d6",
+				"color-43": "#b2756f",
+				"color-44": "#e8aca0",
+				"color-45": "#3e7a7d",
+				"color-46": "#ccb384",
+				"color-47": "#e1dfde",
+				"color-48": "#799969",
+				"color-49": "#abd9b0",
+				"color-50": "#ccdaff",
+				"color-51": "#c3816f",
+				"color-52": "#7eb75c",
+				"color-53": "#b3007c",
+				"color-54": "#f5d300",
+				"color-55": "#bf0222",
+				"color-56": "#00b1ae",
+				"color-57": "#e97117",
+				"color-58": "#6f559d",
+				"color-59": "#26fff7",
+				"color-60": "#007849",
+				"color-61": "#54b0e4",
+			},
+		},
+	},
+	plugins: [flowbitePlugin],
+	safelist: [
+		{
+			pattern: /text-quality-(0|1|2|3|4|5|6|7)/,
+		},
+		{
+			pattern: /text-color-(\d+)/,
+		},
+	],
 } as Config;

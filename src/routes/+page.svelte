@@ -47,17 +47,17 @@
 		{ value: 0, name: "91" }
 	]
 
-	const text_ids = [...item_type_options.map(item => parseInt(item.name)), ...class_options.map(item => parseInt(item.name))];
+	const text_ids = [...item_type_options.map(item => item.name), ...class_options.map(item => item.name)];
 	const texts = getTexts(text_ids, lang, supabase);
 
 	texts.then(data => {
 		item_type_options.forEach(item => {
-			const text = data.find(text => text.id == parseInt(item.name));
+			const text = data.find(text => text.id == "textIndex_" + item.name);
 			if (text)
 				item.name = text[lang];
 		});
 		class_options.forEach(item => {
-			const text = data.find(text => text.id == parseInt(item.name));
+			const text = data.find(text => text.id == "textIndex_" + item.name);
 			if (text)
 				item.name = text[lang];
 		});
@@ -71,7 +71,6 @@
 
 		const to_delete: string[] = [];
 		for (const [key, value] of urlParams.entries()) {
-			console.log(key, value);
 			if (value == "") to_delete.push(key);
 		}
 		to_delete.forEach(key => urlParams.delete(key));

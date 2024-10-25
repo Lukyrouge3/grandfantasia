@@ -6,48 +6,8 @@ export type TextIndex = {
 	translation: Record<string, string>;
 }
 
-// export function loadTexts(path: string) {
-// 	const texts = new Map<number, TextIndex>();
-// 	const langs = fs.readdirSync("resources/translations");
-// 	for (const lang of langs) {
-// 		const lines = gfParse(
-// 			"resources/translations/" + lang + "/" + path,
-// 		);
-// 		lines.shift();
-// 		for (const l in lines) {
-// 			const line = lines[l];
-// 			const id = parseInt(line[0]);
-// 			// console.log(id);
-// 			if (!id || isNaN(id)) continue;
-// 			if (!texts.has(id)) {
-// 				texts.set(id, { id, translation: {} });
-// 			}
-// 			texts.get(id)!.translation[lang] = line[1];
-// 		}
-// 	}
-// 	return texts;
-// }
-
-// export async function storeTexts(texts: TextIndex[]): Promise<void> {
-// 	const supabase = createClient(
-// 		PUBLIC_SUPABASE_URL,
-// 		PRIVATE_SUPABASE_SERVICE_KEY,
-// 	);
-// 	const translation_chunk = texts.map((t) => {
-// 		const { translation, ...other } = t;
-// 		return { ...other, ...translation };
-// 	});
-// 	const { error: errorTranslation, data: db_translation } = await supabase.from(
-// 		"text_translation",
-// 	).upsert(translation_chunk).select();
-// 	if (errorTranslation) {
-// 		console.error(errorTranslation);
-// 		return;
-// 	}
-// }
-
 export async function getText(id: number, lang: string, supabase: ReturnType<typeof createBrowserClient<Database>>) {
-	const { data, error } = await supabase.from("text_translation").select("*").eq("id", id).single();
+	const { data, error } = await supabase.from("translation").select("*").eq("id", "textIndex_" + id).single();
 	if (error) {
 		console.error(error);
 		return;
@@ -55,8 +15,8 @@ export async function getText(id: number, lang: string, supabase: ReturnType<typ
 	return data;
 }
 
-export async function getTexts(ids: number[], lang: string, supabase: ReturnType<typeof createBrowserClient<Database>>) {
-	const { data, error } = await supabase.from("text_translation").select("*").in("id", ids);
+export async function getTexts(ids: string[], lang: string, supabase: ReturnType<typeof createBrowserClient<Database>>) {
+	const { data, error } = await supabase.from("translation").select("*").in("id", ids.map((id) => "textIndex_" + id));
 	if (error) {
 		console.error(error);
 		return [];
