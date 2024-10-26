@@ -16,7 +16,8 @@
 		types: initial_types = [],
 		classes: initial_classes = "",
 		min_level: initial_min_level = "0",
-		max_level: initial_max_level = "100"
+		max_level: initial_max_level = "100",
+		page = $bindable(1)
 	}: {
 		supabase: ReturnType<typeof createBrowserClient<Database>>,
 		lang: 'fr' | 'en' | 'es' | 'pt',
@@ -24,7 +25,8 @@
 		classes?: string | null,
 		types?: number[] | null,
 		min_level?: string | null,
-		max_level?: string | null
+		max_level?: string | null,
+		page?: number | null
 	} = $props();
 
 	let search = $state(initial_search || "");
@@ -83,7 +85,8 @@
 			types: item_types.length > 0 ? item_types.join(",") : "",
 			classes: classes,
 			min_level: min_level > 0 ? min_level.toString() : "",
-			max_level: max_level < 100 ? max_level.toString() : ""
+			max_level: max_level < 100 ? max_level.toString() : "",
+			page: (page || 1).toString()
 		});
 
 		const to_delete: string[] = [];
@@ -95,9 +98,9 @@
 		return urlParams.toString();
 	}
 	
-	const handleSearch = () => {
+	export const handleSearch = () => {
 		const query = search_to_query();
-		if (query.trim() == "") return;
+		// if (query.trim() == "") return;
 		// Redirect to the search page
 		if (browser)
 			window.location.href = `/search?${search_to_query()}`;

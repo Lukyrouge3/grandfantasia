@@ -10,20 +10,20 @@ export const load: PageLoad = async ({ url, parent }) => {
 	const classes = url.searchParams.get("classes"); // TODO: implement classes
 	const min_level = url.searchParams.get("min_level");
 	const max_level = url.searchParams.get("max_level");
+	const page = parseInt(url.searchParams.get("page") || "1");
 	const lang = "fr"; // TODO: get from user settings
+	const page_size = 20;
 
-	const query = supabase.from("item").select("*, item_name:translation!name_translation_id!inner(fr)").limit(10);
+	const query = supabase.from("item").select("*, item_name:translation!name_translation_id!inner(fr)", {count: 'exact', head: true}).limit(page_size);
 	if (name && name.length > 0) query.textSearch(`item_name.${lang}`, name.trim().split(" ").map((word) => `'${word.replaceAll("'", "\\'")}':*`).join(" & "));
 	if (types && types.length > 0) query.in("item_type", types_array);
 	if (min_level) query.gte("restrict_level", parseInt(min_level));
 	if (max_level) query.lte("restrict_level", parseInt(max_level));
-	if (classes) {
-		query.eq("restrict_class", classes);
-	}
+	if (classes) query.eq("restrict_class", classes);
 
 
-	const { data: items, error } = await query;
+	const { data: items, error, count } = await query;
 	if (error) throw error;
 
-	return { items, name, types: types_array, min_level, max_level, classes };
+	return { items, name, types: types_array, min_level, max_level, classes, page_size, lang, object_count: count || 0, page };
 }

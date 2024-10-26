@@ -141,6 +141,9 @@
 		<!-- <Spinner /> -->
 	{:then _}
 		<tbody onclick={handleClick}>
+			<tr>
+				<td colspan="18" class="text-center pb-4">Click a cell to select / unselect a class. <br/> ⚠️ It must be an exact match for now ⚠️</td>
+			</tr>
 			{#each rows as row}
 				<tr class="">
 					{#each row as cell}
