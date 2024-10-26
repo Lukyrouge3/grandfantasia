@@ -1,19 +1,16 @@
 <script lang="ts">
+	import Search from '$lib/components/Search.svelte';
 	import { Card, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 
 	const { data } = $props();
-	const { items } = data;
+	const { items, supabase, name, types, max_level, min_level, classes } = data;
+	const lang = "fr";
 
 </script>
 
 <div class="mx-auto flex w-1/2 flex-col justify-center mt-8">
-	<!-- {#each items as item}
-		<div class="flex flex-row items-center gap-8 border border-gray-400">
-			<img src={item.icon_filename} alt={item.name} class="h-10 w-10" />
-			<h2 class="text-quality-{item.item_quality}">{item.item_name!['fr']}</h2>
-		</div>
-	{/each} -->
-	<Table>
+	<Search {supabase} {lang} search={name || ""} {types} {max_level} {min_level} {classes}/>
+	<Table class="mt-8">
 		<TableHead>
 			<TableHeadCell class="w-2/12 text-center"></TableHeadCell>
 			<TableHeadCell class="w-9/12">Name</TableHeadCell>
