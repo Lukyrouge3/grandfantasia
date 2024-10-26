@@ -14,7 +14,7 @@ export const load: PageLoad = async ({ url, parent }) => {
 	const lang = "fr"; // TODO: get from user settings
 	const page_size = 20;
 
-	const query = supabase.from("item").select("*, item_name:translation!name_translation_id!inner(fr)", {count: 'exact', head: true}).limit(page_size);
+	const query = supabase.from("item").select("*, item_name:translation!name_translation_id!inner(fr)", {count: 'exact', head: false}).range((page - 1) * page_size, page * page_size - 1).order("id", {ascending: true}).neq("item_name.fr", "");
 	if (name && name.length > 0) query.textSearch(`item_name.${lang}`, name.trim().split(" ").map((word) => `'${word.replaceAll("'", "\\'")}':*`).join(" & "));
 	if (types && types.length > 0) query.in("item_type", types_array);
 	if (min_level) query.gte("restrict_level", parseInt(min_level));

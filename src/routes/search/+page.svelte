@@ -35,4 +35,5 @@
 			{/each}
 		</TableBody>
 	</Table>
+	<PageSelector {object_count} {page_size} {page} pageChange={onPageChange} />
 </div>

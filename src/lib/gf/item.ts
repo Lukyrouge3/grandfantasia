@@ -1,12 +1,4 @@
-import type Redis from "ioredis-rejson";
-import iconv from "iconv-lite";
-import fs from "node:fs";
-import { gfParse } from "./parser";
-import { redis } from "$lib/redis";
-import { createClient } from "@supabase/supabase-js";
-import { PUBLIC_SUPABASE_URL } from "$env/static/public";
-import { PRIVATE_SUPABASE_SERVICE_KEY } from "$env/static/private";
-import type { Database } from "$lib/supabase";
+import type { Tables } from "$lib/supabase";
 
 export type Item = {
 	id: number;
@@ -133,3 +125,42 @@ export type DropItem = {
 };
 
 // let str = iconv.decode(fileData, 'win1252');
+
+export type StatsField = {
+    field: keyof Tables<'item'>,
+    label: string,
+    side: 'left' | 'right',
+    format?: (value: any) => string,
+    type: 'integer' | 'float' | 'text'
+}
+
+export const divideBy10 = (val: number) => {
+    return (val / 10).toFixed(1);
+}
+
+export const statsFields: StatsField[] = [
+    { field: 'attack', label: 'ATK', side: 'right', type: 'integer'},
+    { field: 'range_attack', label: 'R-ATK', side: 'right', type: 'integer'},
+    { field: 'magic_damage', label: 'M-ATK', side: 'right', type: 'integer'},
+    { field: 'physical_defence', label: 'DEF', side: 'right', type: 'integer'},
+    { field: 'magic_defence', label: 'M-DEF', side: 'right', type: 'integer'},
+    { field: 'attack_speed', label: 'SPD', side: 'right', format: divideBy10, type: 'float'},
+    { field: 'str', label: 'STR', side: 'right', type: 'integer'},
+    { field: 'vit', label: 'VIT', side: 'right', type: 'integer'},
+    { field: 'int', label: 'INT', side: 'right', type: 'integer'},
+    { field: 'will', label: 'WIL', side: 'right', type: 'integer'},
+    { field: 'agi', label: 'AGI', side: 'right', type: 'integer'},
+    { field: 'max_hp', label: 'HP', side: 'left', type: 'integer'},
+    { field: 'max_mp', label: 'MP', side: 'left', type: 'integer'},
+    { field: 'hit_rate', label: '% chance of hit', side: 'left', type: 'integer'},
+    { field: 'dodge_rate', label: '% chance to evade', side: 'left', type: 'integer'},
+    { field: 'block_rate', label: '% chance to block', side: 'left', type: 'integer'},
+    { field: 'physical_critical_rate', label: '% chance for a critical hit', side: 'left', format: divideBy10, type: 'float'},
+    { field: 'physical_critical_damage', label: '% critical hit damage', side: 'left', type: 'integer'},
+    { field: 'magic_critical_rate', label: '% chance for a magic critical hit', side: 'left', format: divideBy10, type: 'float'},
+    { field: 'magic_critical_damage', label: '% magic critical hit damage', side: 'left', type: 'integer'},
+    { field: 'physical_penetration', label: '% physical PEN', side: 'left', format: divideBy10, type: 'float'},
+    { field: 'magic_penetration', label: '% magic PEN', side: 'left', format: divideBy10, type: 'float'},
+    { field: 'physical_penetration_defence', label: '% physical PEN reduction', side: 'left', format: divideBy10, type: 'float'},
+    { field: 'magic_penetration_defence', label: '% magic PEN reduction', side: 'left', format: divideBy10, type: 'float'},
+]

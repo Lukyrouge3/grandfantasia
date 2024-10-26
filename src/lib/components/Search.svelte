@@ -4,7 +4,7 @@
 	import type { Database } from "$lib/supabase";
 	import type { createBrowserClient } from "@supabase/ssr";
 	import { Button, Input, Label, Spinner, ButtonGroup } from "flowbite-svelte";
-	import { SearchOutline } from "flowbite-svelte-icons";
+	import { SearchOutline, ChevronDownOutline, ChevronUpOutline } from "flowbite-svelte-icons";
 	import Modal from "flowbite-svelte/Modal.svelte";
 	import MultiSelect from "flowbite-svelte/MultiSelect.svelte";
 	import Class from "./Class.svelte";
@@ -36,6 +36,7 @@
 	let max_level = $state(parseInt(initial_max_level || "100"));
 
 	let class_modal_visible = $state(false);
+	let filters_visible = $state(true);
 
 	const item_type_options = [
 		{ value: -1, name: "763", disabled: true},
@@ -86,7 +87,7 @@
 			classes: classes,
 			min_level: min_level > 0 ? min_level.toString() : "",
 			max_level: max_level < 100 ? max_level.toString() : "",
-			page: (page || 1).toString()
+			page: (page || "").toString()
 		});
 
 		const to_delete: string[] = [];
@@ -115,51 +116,66 @@
 	const onClassChange = (value: string) => {
 		classes = value;
 	};
+
+	const handleClassReset = () => {
+		classes = "";
+		handleSearch();
+	}
 </script>
 
 
 <form action="" onsubmit={handleSearch} class="flex flex-col gap-4">
 	<Input id="search" type="text" placeholder="Search for an item..." size={"lg"} bind:value={search}>
-		<Button slot="right" size="lg" color="primary" class="h-10 w-10" type="submit">
+		<!-- <Button slot="right" size="lg" color="primary" class="h-10 w-10" type="submit">
 			<SearchOutline class="h-5 w-5 text-white" />
-		</Button>
+		</Button> -->
 	</Input>
-	<div class="flex flex-col">
-		<div class="flex flex-row gap-4">
-			<Label class="">
-				Min level
-				<Input type="number" class="mt-2" bind:value={min_level} min="0" max="100"/>
-			</Label>
-			<Label class="">
-				Max level
-				<Input type="number" class="mt-2" bind:value={max_level} min="0" max="100"/>
-			</Label>
-			{#await texts}
-				<Spinner class="w-10 h-10 text-primary-500" />
-			{:then _} 
-				<Label class="w-1/2">
-					Filter by category
-					<MultiSelect class="mt-2" items={item_type_options} bind:value={item_types} placeholder="Pick categories"/>
+	<Button type="button" color="alternative" class="w-full" onclick={() => filters_visible = !filters_visible}>
+		{#if filters_visible}
+			<ChevronUpOutline /> Show filters <ChevronUpOutline />
+		{:else}
+			<ChevronDownOutline /> Show filters <ChevronDownOutline />
+		{/if}
+	</Button>	
+	{#if filters_visible}
+		<div class="flex flex-col">
+			<div class="flex flex-row gap-4">
+				<Label class="">
+					Min level
+					<Input type="number" class="mt-2" bind:value={min_level} min="0" max="100"/>
 				</Label>
-			{/await}
-			
-		</div>
-		<div class="flex flex-row gap-4 mt-4">
-			<ButtonGroup>
-				<Button type="button" color="alternative" class="" onclick={openClassModal}>
-					Classes
-				</Button>
-				<Input id="classes" type="text" bind:value={classes} disabled placeholder="Filter the classes" onclick={openClassModal}/>
-			</ButtonGroup>
-		</div>
-	</div>
+				<Label class="">
+					Max level
+					<Input type="number" class="mt-2" bind:value={max_level} min="0" max="100"/>
+				</Label>
+				{#await texts}
+					<Spinner class="w-10 h-10 text-primary-500" />
+				{:then _} 
+					<Label class="w-1/2">
+						Filter by category
+						<MultiSelect class="mt-2" items={item_type_options} bind:value={item_types} placeholder="Pick categories"/>
+					</Label>
+				{/await}
+				
+			</div>
+			<div class="flex flex-row gap-4 mt-4">
+				<ButtonGroup>
+					<Button type="button" color="alternative" class="" onclick={openClassModal}>
+						Classes
+					</Button>
+					<Input id="classes" type="text" bind:value={classes} disabled placeholder="Filter the classes" onclick={openClassModal}/>
+				</ButtonGroup>
+			</div>
+		</div>		
+	{/if}
+	<Button class="w-full" type="submit">Search</Button>
 </form>
 
 <Modal title="Filter classes" bind:open={class_modal_visible} outsideclose autoclose size="lg">
 	<div class="flex flex-col justify-center items-center">
 		<Class {supabase} bind:classes={classes} />
 		<ButtonGroup>
-			<Button color="alternative" class="mt-4" onclick={() => classes = ""}>
+			<Button color="alternative" class="mt-4" onclick={handleClassReset}>
 				Reset
 			</Button>
 			<Button color="primary" class="mt-4" onclick={handleSearch}>
