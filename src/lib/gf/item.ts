@@ -100,26 +100,26 @@ export type Item = {
 
 export const maxDropItem = 45;
 export type DropItemData = {
-	id: number;
+	monster_id: number;
 	name: string;
 	level: number;
-	dropGoldRate: number;
-	avgGold: number;
-	randGold: number;
-	randTimes: number;
-	notDropRate: number;
-	greenRate: number;
-	blueRate: number;
-	orangeRate: number;
-	yellowRate: number;
+	drop_gold_rate: number;
+	avg_gold: number;
+	rand_gold: number;
+	rand_times: number;
+	not_drop_rate: number;
+	green_rate: number;
+	blue_rate: number;
+	orange_rate: number;
+	yellow_rate: number;
 	unknown1: number;
-	dropItems: DropItem[];
-	unknownString: string;
+	drop_items: DropItem[];
+	unknown_string: string;
 };
 
 export type DropItem = {
-	itemId: number;
-	itemName: string;
+	item_id: number;
+	item_name: string;
 	stack: number;
 	rate: number;
 };

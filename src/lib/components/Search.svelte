@@ -132,7 +132,7 @@
 	</Input>
 	<Button type="button" color="alternative" class="w-full" onclick={() => filters_visible = !filters_visible}>
 		{#if filters_visible}
-			<ChevronUpOutline /> Show filters <ChevronUpOutline />
+			<ChevronUpOutline /> Hide filters <ChevronUpOutline />
 		{:else}
 			<ChevronDownOutline /> Show filters <ChevronDownOutline />
 		{/if}

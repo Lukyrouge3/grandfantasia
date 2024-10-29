@@ -1,0 +1,5 @@
+// Id|ModelIds|ModelScales|Name|Level|Rank|Type|MaxHp|MaxMp|FearType|PartHP|PartBreakingAction|AvgPhysicoDamage|RandPhysicoDamage|AttackRange|AttackSpeed|Attack|PhysicoDefence|MagicDamage|MagicDefence|HitRate|DodgeRate|PhysicoCriticalRate|PhysicoCriticalDamage|MagicCriticalRate|MagicCriticalDamage|PhysicalPenetration|MagicalPenetration|PhysicalPenetrationDefence|MagicalPenetrationDefence|Attribute|AttributeDamage|AttributeRate|AttributeResist|InnateBuffs|RandBuffNum|RandomBuffs|CastingEffectId|RoamSpeed|PursuitSpeed|MoveRange|DetectRange|AiId|MaxCallHelp|MonsterAlignment|IdleSpellId|BattleSpells|RestoreSpellId|SummonMonsterId|SummonType|SummonRate|SummonMax|SummonEffectId|Exp|Shout|ShoutForMan|ShoutForWoman|ZoneIcon|LocateLimit|AchievementMap|AutoSpellDuring|AutoSpellID|SpellShoutCmds|SpecialFlag|LowerLimit
+
+import type { Tables } from "$lib/supabase";
+
+export type Monster = Tables<'monster'> & {name_translation: Record<string, string>};

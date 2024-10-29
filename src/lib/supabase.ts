@@ -59,6 +59,100 @@ export type Database = {
   }
   public: {
     Tables: {
+      drop_item: {
+        Row: {
+          drop_item_data_id: number | null
+          id: number
+          item_id: number
+          item_name: string
+          rate: number | null
+          stack: number | null
+        }
+        Insert: {
+          drop_item_data_id?: number | null
+          id?: number
+          item_id: number
+          item_name?: string
+          rate?: number | null
+          stack?: number | null
+        }
+        Update: {
+          drop_item_data_id?: number | null
+          id?: number
+          item_id?: number
+          item_name?: string
+          rate?: number | null
+          stack?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drop_item_drop_item_data_id_fkey"
+            columns: ["drop_item_data_id"]
+            referencedRelation: "drop_item_data"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "drop_item_item_id_fkey"
+            columns: ["item_id"]
+            referencedRelation: "item"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drop_item_data: {
+        Row: {
+          avg_gold: number | null
+          blue_rate: number | null
+          drop_gold_rate: number | null
+          green_rate: number | null
+          id: number
+          level: number | null
+          monster_id: number
+          name: string
+          not_drop_rate: number | null
+          orange_rate: number | null
+          rand_gold: number | null
+          rand_times: number | null
+          unknown_string: string | null
+          unknown1: number | null
+          yellow_rate: number | null
+        }
+        Insert: {
+          avg_gold?: number | null
+          blue_rate?: number | null
+          drop_gold_rate?: number | null
+          green_rate?: number | null
+          id?: number
+          level?: number | null
+          monster_id: number
+          name: string
+          not_drop_rate?: number | null
+          orange_rate?: number | null
+          rand_gold?: number | null
+          rand_times?: number | null
+          unknown_string?: string | null
+          unknown1?: number | null
+          yellow_rate?: number | null
+        }
+        Update: {
+          avg_gold?: number | null
+          blue_rate?: number | null
+          drop_gold_rate?: number | null
+          green_rate?: number | null
+          id?: number
+          level?: number | null
+          monster_id?: number
+          name?: string
+          not_drop_rate?: number | null
+          orange_rate?: number | null
+          rand_gold?: number | null
+          rand_times?: number | null
+          unknown_string?: string | null
+          unknown1?: number | null
+          yellow_rate?: number | null
+        }
+        Relationships: []
+      }
       item: {
         Row: {
           agi: number | null
@@ -133,7 +227,7 @@ export type Database = {
           restrict_class: string | null
           restrict_event_pos_id: string | null
           restrict_gender: number | null
-          restrict_level: number | null
+          restrict_level: number
           restrict_max_level: number | null
           restrict_prestige: number | null
           shop_price_type: number | null
@@ -230,7 +324,7 @@ export type Database = {
           restrict_class?: string | null
           restrict_event_pos_id?: string | null
           restrict_gender?: number | null
-          restrict_level?: number | null
+          restrict_level?: number
           restrict_max_level?: number | null
           restrict_prestige?: number | null
           shop_price_type?: number | null
@@ -327,7 +421,7 @@ export type Database = {
           restrict_class?: string | null
           restrict_event_pos_id?: string | null
           restrict_gender?: number | null
-          restrict_level?: number | null
+          restrict_level?: number
           restrict_max_level?: number | null
           restrict_prestige?: number | null
           shop_price_type?: number | null
@@ -366,6 +460,210 @@ export type Database = {
           },
         ]
       }
+      monster: {
+        Row: {
+          achievement_map: string | null
+          ai_id: number | null
+          attack: number | null
+          attack_range: number | null
+          attack_speed: number | null
+          attribute: number | null
+          attribute_damage: number | null
+          attribute_rate: number | null
+          attribute_resist: number | null
+          auto_spell_during: boolean | null
+          auto_spell_id: number | null
+          avg_physical_damage: number | null
+          battle_spells: string | null
+          casting_effect_id: number | null
+          detect_range: number | null
+          dodge_rate: number | null
+          exp: number | null
+          fear_type: number | null
+          hit_rate: number | null
+          id: number
+          idle_spell_id: number | null
+          innate_buffs: string | null
+          level: number | null
+          locate_limit: number | null
+          lower_limit: number | null
+          magic_critical_damage: number | null
+          magic_critical_rate: number | null
+          magic_damage: number | null
+          magic_defence: number | null
+          magical_penetration: number | null
+          magical_penetration_defence: number | null
+          max_call_help: number | null
+          max_hp: number | null
+          max_mp: number | null
+          model_ids: string | null
+          model_scales: number | null
+          monster_alignment: number | null
+          move_range: number | null
+          name: string | null
+          part_breaking_action: number | null
+          part_hp: number | null
+          physical_critical_damage: number | null
+          physical_critical_rate: number | null
+          physical_defence: number | null
+          physical_penetration: number | null
+          physical_penetration_defence: number | null
+          pursuit_speed: number | null
+          rand_buff_num: number | null
+          rand_physical_damage: number | null
+          random_buffs: string | null
+          rank: number | null
+          restore_spell_id: number | null
+          roam_speed: number | null
+          shout: string | null
+          shout_for_man: string | null
+          shout_for_woman: string | null
+          special_flag: number | null
+          spell_shout_cmds: string | null
+          summon_effect_id: number | null
+          summon_max: number | null
+          summon_monster_id: number | null
+          summon_rate: number | null
+          summon_type: number | null
+          type: number | null
+          zone_icon: string | null
+        }
+        Insert: {
+          achievement_map?: string | null
+          ai_id?: number | null
+          attack?: number | null
+          attack_range?: number | null
+          attack_speed?: number | null
+          attribute?: number | null
+          attribute_damage?: number | null
+          attribute_rate?: number | null
+          attribute_resist?: number | null
+          auto_spell_during?: boolean | null
+          auto_spell_id?: number | null
+          avg_physical_damage?: number | null
+          battle_spells?: string | null
+          casting_effect_id?: number | null
+          detect_range?: number | null
+          dodge_rate?: number | null
+          exp?: number | null
+          fear_type?: number | null
+          hit_rate?: number | null
+          id?: number
+          idle_spell_id?: number | null
+          innate_buffs?: string | null
+          level?: number | null
+          locate_limit?: number | null
+          lower_limit?: number | null
+          magic_critical_damage?: number | null
+          magic_critical_rate?: number | null
+          magic_damage?: number | null
+          magic_defence?: number | null
+          magical_penetration?: number | null
+          magical_penetration_defence?: number | null
+          max_call_help?: number | null
+          max_hp?: number | null
+          max_mp?: number | null
+          model_ids?: string | null
+          model_scales?: number | null
+          monster_alignment?: number | null
+          move_range?: number | null
+          name?: string | null
+          part_breaking_action?: number | null
+          part_hp?: number | null
+          physical_critical_damage?: number | null
+          physical_critical_rate?: number | null
+          physical_defence?: number | null
+          physical_penetration?: number | null
+          physical_penetration_defence?: number | null
+          pursuit_speed?: number | null
+          rand_buff_num?: number | null
+          rand_physical_damage?: number | null
+          random_buffs?: string | null
+          rank?: number | null
+          restore_spell_id?: number | null
+          roam_speed?: number | null
+          shout?: string | null
+          shout_for_man?: string | null
+          shout_for_woman?: string | null
+          special_flag?: number | null
+          spell_shout_cmds?: string | null
+          summon_effect_id?: number | null
+          summon_max?: number | null
+          summon_monster_id?: number | null
+          summon_rate?: number | null
+          summon_type?: number | null
+          type?: number | null
+          zone_icon?: string | null
+        }
+        Update: {
+          achievement_map?: string | null
+          ai_id?: number | null
+          attack?: number | null
+          attack_range?: number | null
+          attack_speed?: number | null
+          attribute?: number | null
+          attribute_damage?: number | null
+          attribute_rate?: number | null
+          attribute_resist?: number | null
+          auto_spell_during?: boolean | null
+          auto_spell_id?: number | null
+          avg_physical_damage?: number | null
+          battle_spells?: string | null
+          casting_effect_id?: number | null
+          detect_range?: number | null
+          dodge_rate?: number | null
+          exp?: number | null
+          fear_type?: number | null
+          hit_rate?: number | null
+          id?: number
+          idle_spell_id?: number | null
+          innate_buffs?: string | null
+          level?: number | null
+          locate_limit?: number | null
+          lower_limit?: number | null
+          magic_critical_damage?: number | null
+          magic_critical_rate?: number | null
+          magic_damage?: number | null
+          magic_defence?: number | null
+          magical_penetration?: number | null
+          magical_penetration_defence?: number | null
+          max_call_help?: number | null
+          max_hp?: number | null
+          max_mp?: number | null
+          model_ids?: string | null
+          model_scales?: number | null
+          monster_alignment?: number | null
+          move_range?: number | null
+          name?: string | null
+          part_breaking_action?: number | null
+          part_hp?: number | null
+          physical_critical_damage?: number | null
+          physical_critical_rate?: number | null
+          physical_defence?: number | null
+          physical_penetration?: number | null
+          physical_penetration_defence?: number | null
+          pursuit_speed?: number | null
+          rand_buff_num?: number | null
+          rand_physical_damage?: number | null
+          random_buffs?: string | null
+          rank?: number | null
+          restore_spell_id?: number | null
+          roam_speed?: number | null
+          shout?: string | null
+          shout_for_man?: string | null
+          shout_for_woman?: string | null
+          special_flag?: number | null
+          spell_shout_cmds?: string | null
+          summon_effect_id?: number | null
+          summon_max?: number | null
+          summon_monster_id?: number | null
+          summon_rate?: number | null
+          summon_type?: number | null
+          type?: number | null
+          zone_icon?: string | null
+        }
+        Relationships: []
+      }
       translation: {
         Row: {
           en: string
@@ -395,7 +693,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_bitwise_and_hex: {
+        Args: {
+          restrict_class_hex: string
+          bitmask: number
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

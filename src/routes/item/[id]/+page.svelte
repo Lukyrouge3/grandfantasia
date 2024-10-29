@@ -24,7 +24,7 @@
 		<span class="text-sm text-gray-400">Level {item.restrict_level || 1}</span>
 		<Accordion class="mt-2 w-full">
 			<AccordionItem>
-				<h6 slot="header" class="text-white">Description</h6>
+				<span slot="header" class="text-white">Description</span>
 				<p class="text-sm text-white">
 					{#if item.item_tip[lang].match(tip_regex)}
 						{#each item.item_tip[lang].match(tip_regex) || [] as tip}
@@ -36,7 +36,7 @@
 				</p>
 			</AccordionItem>
 			<AccordionItem open>
-				<h6 slot="header" class="text-white">Stats</h6>
+				<span slot="header" class="text-white">Stats</span>
 				<div class="text-white flex flex-col text-left text-sm">
 					{#each statsFields as field}
 						{#if item[field.field]}
@@ -47,6 +47,12 @@
 							{/if}
 						{/if}
 					{/each}
+				</div>
+			</AccordionItem>
+			<AccordionItem>
+				<span slot="header" class="text-white">Drops</span>
+				<div class="text-white flex flex-col text-left text-sm">
+					
 				</div>
 			</AccordionItem>
 		</Accordion>
