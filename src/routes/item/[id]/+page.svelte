@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { statsFields } from '$lib/gf/item';
-	import { Accordion, AccordionItem, Card } from 'flowbite-svelte';
+	import { Accordion, AccordionItem, Card, Table, TableHead, TableHeadCell, TableBody, TableBodyCell, TableBodyRow } from 'flowbite-svelte';
 
 	const { data } = $props();
 	const { item } = data;
@@ -12,6 +12,15 @@
 	const color = (str: string) => {
 		return str.split('$')[1];
 	};
+
+	const sorted_drops = item.drops.filter(d => {
+		return d.stack && d.rand_times && d.monster
+	}).sort((a, b) => {
+		if (a.stack! * a.rand_times! == b.stack! * b.rand_times!) {
+			return (a.monster!.level || 0) - (b.monster!.level || 0);
+		}
+		return (b.stack! * b.rand_times!) - (a.stack! * a.rand_times!);
+	})
 </script>
 
 <div class="mx-auto mt-8 flex justify-center">
@@ -35,7 +44,7 @@
 					{/if}
 				</p>
 			</AccordionItem>
-			<AccordionItem open>
+			<AccordionItem>
 				<span slot="header" class="text-white">Stats</span>
 				<div class="text-white flex flex-col text-left text-sm">
 					{#each statsFields as field}
@@ -51,9 +60,24 @@
 			</AccordionItem>
 			<AccordionItem>
 				<span slot="header" class="text-white">Drops</span>
-				<div class="text-white flex flex-col text-left text-sm">
-					
-				</div>
+				<Table class="text-white">
+					<TableHead>
+						<TableHeadCell>Monster</TableHeadCell>
+						<TableHeadCell>Max drop / Kill</TableHeadCell>
+						<TableHeadCell>Level</TableHeadCell>
+						<TableHeadCell>Map</TableHeadCell>
+					</TableHead>
+					<TableBody>
+						{#each sorted_drops as drop}
+							<TableBodyRow>
+								<TableBodyCell><a class="underline" href="/monster/{drop.monster!.id}">{drop.monster!.name[lang]}</a></TableBodyCell>
+								<TableBodyCell>{drop.stack * drop.rand_times!}</TableBodyCell>
+								<TableBodyCell>{drop.monster!.level}</TableBodyCell>
+								<TableBodyCell>WIP</TableBodyCell>
+							</TableBodyRow>
+						{/each}
+					</TableBody>
+				</Table>
 			</AccordionItem>
 		</Accordion>
 	</div>

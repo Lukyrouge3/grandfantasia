@@ -5,8 +5,10 @@ export const load: PageLoad = async ({ parent, params }) => {
 
 	const id = params.id;
 
-	const { data: item, error } = await supabase.from("item").select("*, item_tip:translation!tip_translation_id(*), item_name: translation!name_translation_id(*), drop_item(*, data:drop_item_data!inner(*))").eq("id", id).single();
-	if (error) throw error;
+	const { data: item, error: item_error } = await supabase.from("item").select("*, item_tip:translation!tip_translation_id(*), item_name: translation!name_translation_id(*), drops:drop_item(stack, ...drop_item_data!inner(rand_times, monster!inner(id,level, name:translation(*))))").eq("id", id).single();
+	if (item_error) throw item_error;
+
+	// const monster = item.drops.map((drop) => drop.monster);
 
 	return { item };
 }

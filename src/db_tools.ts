@@ -267,13 +267,15 @@ export function loadDropItems(file: string): DropItemData[] {
 
 export async function storeDropItems(dropItems: DropItemData[], supabase: ReturnType<typeof createClient<Database>>): Promise<void> {
 	const items = loadItems("C_Item.ini", "T_Item.ini");
+	const monsters = loadMonsters("C_Monster.ini", "T_Monster.ini");
+
 	for (let i = 0; i < dropItems.length; i += 500) {
 		console.log("Storing items", i, "to", i + 500);
 		const chunk = dropItems.slice(i, i + 500);
 		const drop_item_data_chunk = chunk.map((i) => {
 			const { drop_items, ...other } = i;
 			return {...other};
-		});
+		}).filter(i => monsters.has(i.monster_id));
 
 		const {data, error} = await supabase.from("drop_item_data").upsert(drop_item_data_chunk, { onConflict: "monster_id" }).select("id, monster_id");
 
@@ -468,15 +470,15 @@ async function refresh_db() {
 	// await storeItems(mall_items, supabase);
 	// console.timeEnd("Mall Items loaded");
 
+	// console.time("Monsters loaded");
+	// const monsters = loadMonsters("C_Monster.ini", "T_Monster.ini");
+	// await storeMonsters(monsters, supabase);
+	// console.timeEnd("Monsters loaded");
+
 	// console.time("Drop Items loaded");
 	// const drop_items = loadDropItems("C_DropItem.ini");
 	// await storeDropItems(drop_items, supabase);
 	// console.timeEnd("Drop Items loaded");
-
-	console.time("Monsters loaded");
-	const monsters = loadMonsters("C_Monster.ini", "T_Monster.ini");
-	await storeMonsters(monsters, supabase);
-	console.timeEnd("Monsters loaded");
 
 }
 

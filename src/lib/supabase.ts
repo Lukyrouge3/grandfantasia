@@ -66,7 +66,7 @@ export type Database = {
           item_id: number
           item_name: string
           rate: number | null
-          stack: number | null
+          stack: number
         }
         Insert: {
           drop_item_data_id?: number | null
@@ -74,7 +74,7 @@ export type Database = {
           item_id: number
           item_name?: string
           rate?: number | null
-          stack?: number | null
+          stack?: number
         }
         Update: {
           drop_item_data_id?: number | null
@@ -82,7 +82,7 @@ export type Database = {
           item_id?: number
           item_name?: string
           rate?: number | null
-          stack?: number | null
+          stack?: number
         }
         Relationships: [
           {
@@ -112,7 +112,7 @@ export type Database = {
           not_drop_rate: number | null
           orange_rate: number | null
           rand_gold: number | null
-          rand_times: number | null
+          rand_times: number
           unknown_string: string | null
           unknown1: number | null
           yellow_rate: number | null
@@ -129,7 +129,7 @@ export type Database = {
           not_drop_rate?: number | null
           orange_rate?: number | null
           rand_gold?: number | null
-          rand_times?: number | null
+          rand_times?: number
           unknown_string?: string | null
           unknown1?: number | null
           yellow_rate?: number | null
@@ -146,12 +146,19 @@ export type Database = {
           not_drop_rate?: number | null
           orange_rate?: number | null
           rand_gold?: number | null
-          rand_times?: number | null
+          rand_times?: number
           unknown_string?: string | null
           unknown1?: number | null
           yellow_rate?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "drop_item_data_monster_id_fkey"
+            columns: ["monster_id"]
+            referencedRelation: "monster"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       item: {
         Row: {
@@ -484,7 +491,7 @@ export type Database = {
           id: number
           idle_spell_id: number | null
           innate_buffs: string | null
-          level: number | null
+          level: number
           locate_limit: number | null
           lower_limit: number | null
           magic_critical_damage: number | null
@@ -501,6 +508,7 @@ export type Database = {
           monster_alignment: number | null
           move_range: number | null
           name: string | null
+          name_translation_id: string
           part_breaking_action: number | null
           part_hp: number | null
           physical_critical_damage: number | null
@@ -551,7 +559,7 @@ export type Database = {
           id?: number
           idle_spell_id?: number | null
           innate_buffs?: string | null
-          level?: number | null
+          level?: number
           locate_limit?: number | null
           lower_limit?: number | null
           magic_critical_damage?: number | null
@@ -568,6 +576,7 @@ export type Database = {
           monster_alignment?: number | null
           move_range?: number | null
           name?: string | null
+          name_translation_id: string
           part_breaking_action?: number | null
           part_hp?: number | null
           physical_critical_damage?: number | null
@@ -618,7 +627,7 @@ export type Database = {
           id?: number
           idle_spell_id?: number | null
           innate_buffs?: string | null
-          level?: number | null
+          level?: number
           locate_limit?: number | null
           lower_limit?: number | null
           magic_critical_damage?: number | null
@@ -635,6 +644,7 @@ export type Database = {
           monster_alignment?: number | null
           move_range?: number | null
           name?: string | null
+          name_translation_id?: string
           part_breaking_action?: number | null
           part_hp?: number | null
           physical_critical_damage?: number | null
@@ -662,7 +672,14 @@ export type Database = {
           type?: number | null
           zone_icon?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "monster_name_translation_id_fkey"
+            columns: ["name_translation_id"]
+            referencedRelation: "translation"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       translation: {
         Row: {
