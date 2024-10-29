@@ -104,7 +104,7 @@
 		// if (query.trim() == "") return;
 		// Redirect to the search page
 		if (browser)
-			window.location.href = `/search?${search_to_query()}`;
+			window.location.href = `/${lang}/search?${search_to_query()}`;
 	};
 
 	const openClassModal = (e: Event) => {

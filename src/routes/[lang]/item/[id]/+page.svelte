@@ -3,8 +3,7 @@
 	import { Accordion, AccordionItem, Card, Table, TableHead, TableHeadCell, TableBody, TableBodyCell, TableBodyRow } from 'flowbite-svelte';
 
 	const { data } = $props();
-	const { item } = data;
-	const lang = 'fr';
+	const { item, lang } = data;
 
 	console.log(item);
 
@@ -21,12 +20,12 @@
 		}
 		return (b.stack! * b.rand_times!) - (a.stack! * a.rand_times!);
 	})
+
+	console.log(lang);
 </script>
 
 <div class="mx-auto mt-8 flex justify-center">
-	<div
-		class="flex w-1/2 flex-col items-center gap-1 rounded-xl border border-gray-700 bg-gray-800 p-4 shadow-md"
-	>
+	<div class="flex w-1/2 flex-col items-center gap-1 rounded-xl border border-gray-700 bg-gray-800 p-4 shadow-md">
 		<img src="/itemicon/{item.icon_filename}.png" alt="" class="h-16 w-16" />
 		<h5 class="mb-1 text-lg font-medium text-white">{item.item_name[lang]}</h5>
 		<span class="text-sm text-gray-400">ID: {item.id}</span>

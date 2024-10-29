@@ -3,15 +3,15 @@
 	import Heading from 'flowbite-svelte/Heading.svelte';
 
 	const { data } = $props();
-	const { supabase } = data;
+	const { supabase, lang } = data;
 
-	const lang = "fr";
+	console.log(lang);
 
 </script>
 
 <div class="flex h-screen w-screen flex-col items-center justify-center">
 	<Heading class="mb-8 text-center">Grand Fantasia Database</Heading>
 	<div class="w-1/2">
-		<Search {supabase} {lang} />
+		<Search {supabase} {lang}/>
 	</div>
 </div>

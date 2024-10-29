@@ -71,7 +71,7 @@ export function loadItems(file: string, translationFile: string): Item[] {
 				op_flags_plus: parseInt(line[13]),
 				target: parseInt(line[14]),
 				restrict_gender: parseInt(line[15]),
-				restrict_level: parseInt(line[16]),
+				restrict_level: parseInt(line[16]) || 0,
 				restrict_max_level: parseInt(line[17]),
 				rebirth_count: parseInt(line[18]),
 				rebirth_score: parseInt(line[19]),
@@ -234,11 +234,11 @@ export function loadDropItems(file: string): DropItemData[] {
         const item: DropItemData = {
             monster_id: parseInt(line[0]),
             name: line[1],
-            level: parseInt(line[2]),
+            level: parseInt(line[2]) || 0,
             drop_gold_rate: parseInt(line[3]),
             avg_gold: parseInt(line[4]),
             rand_gold: parseInt(line[5]),
-            rand_times: parseInt(line[6]),
+            rand_times: parseInt(line[6]) || 0,
             not_drop_rate: parseInt(line[7]),
             green_rate: parseInt(line[8]),
             blue_rate: parseInt(line[9]),
@@ -253,7 +253,7 @@ export function loadDropItems(file: string): DropItemData[] {
             const dropItem = {
                 item_id: parseInt(line[13 + 4*i]),
                 item_name: line[4*i + 14],
-                stack: parseInt(line[4*i + 15]),
+                stack: parseInt(line[4*i + 15]) || 0,
                 rate: parseFloat(line[4*i + 16])
             };
             dropItems[i] = dropItem;
@@ -321,7 +321,7 @@ export function loadMonsters(file: string, translation: string): Map<number, Mon
 				model_ids: line[1],
 				model_scales: parseInt(line[2]),
 				name: line[3],
-				level: parseInt(line[4]),
+				level: parseInt(line[4]) || 0,
 				rank: parseInt(line[5]),
 				type: parseInt(line[6]),
 				max_hp: parseInt(line[7]),
@@ -383,6 +383,7 @@ export function loadMonsters(file: string, translation: string): Map<number, Mon
 				special_flag: parseInt(line[63]),
 				lower_limit: parseInt(line[64]),
 				name_translation: {},
+				name_translation_id: "monster_name_" + line[0],
 			};
 			if (monster.id && !isNaN(monster.id)) monsters.set(monster.id, monster);
 		}
@@ -459,11 +460,11 @@ async function refresh_db() {
 	// await storeTexts(Array.from(texts.values()), supabase);
 	// console.timeEnd("Texts loaded");
 
-	// console.log("Loading items...");
-	// console.time("Items loaded");
-	// const items = loadItems("C_Item.ini", "T_Item.ini");
-	// await storeItems(items, supabase);
-	// console.timeEnd("Items loaded");
+	console.log("Loading items...");
+	console.time("Items loaded");
+	const items = loadItems("C_Item.ini", "T_Item.ini");
+	await storeItems(items, supabase);
+	console.timeEnd("Items loaded");
 
 	// console.time("Mall Items loaded");
 	// const mall_items = loadItems("C_ItemMall.ini", "T_ItemMall.ini");
