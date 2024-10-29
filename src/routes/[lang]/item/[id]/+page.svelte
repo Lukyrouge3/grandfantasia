@@ -16,7 +16,7 @@
 		return d.stack && d.rand_times && d.monster
 	}).sort((a, b) => {
 		if (a.stack! * a.rand_times! == b.stack! * b.rand_times!) {
-			return (a.monster!.level || 0) - (b.monster!.level || 0);
+			return (b.monster!.level || 0) - (a.monster!.level || 0);
 		}
 		return (b.stack! * b.rand_times!) - (a.stack! * a.rand_times!);
 	})

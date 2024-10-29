@@ -319,71 +319,71 @@ export function loadMonsters(file: string, translation: string): Map<number, Mon
 			const monster: Monster = {
 				id: parseInt(line[0]),
 				model_ids: line[1],
-				model_scales: parseInt(line[2]),
-				name: line[3],
-				level: parseInt(line[4]) || 0,
-				rank: parseInt(line[5]),
-				type: parseInt(line[6]),
-				max_hp: parseInt(line[7]),
-				max_mp: parseInt(line[8]),
-				fear_type: parseInt(line[9]),
-				part_hp: parseInt(line[10]),
-				part_breaking_action: parseInt(line[11]),
-				avg_physical_damage: parseInt(line[12]),
-				rand_physical_damage: parseInt(line[13]),
-				attack_range: parseInt(line[14]),
-				attack_speed: parseInt(line[15]),
-				attack: parseInt(line[16]),
-				physical_defence: parseInt(line[17]),
-				magic_damage: parseInt(line[18]),
-				magic_defence: parseInt(line[19]),
-				hit_rate: parseInt(line[20]),
-				dodge_rate: parseInt(line[21]),
-				physical_critical_rate: parseInt(line[22]),
-				physical_critical_damage: parseInt(line[23]),
-				magic_critical_rate: parseInt(line[24]),
-				magic_critical_damage: parseInt(line[25]),
-				physical_penetration: parseInt(line[26]),
-				magical_penetration: parseInt(line[27]),
-				physical_penetration_defence: parseInt(line[28]),
-				magical_penetration_defence: parseInt(line[29]),
-				attribute: parseInt(line[30]),
-				attribute_damage: parseInt(line[31]),
-				attribute_rate: parseInt(line[32]),
-				attribute_resist: parseInt(line[33]),
-				innate_buffs: line[34],
-				rand_buff_num: parseInt(line[35]),
-				random_buffs: line[36],
-				casting_effect_id: parseInt(line[37]),
-				roam_speed: parseInt(line[38]),
-				pursuit_speed: parseInt(line[39]),
-				move_range: parseInt(line[40]),
-				detect_range: parseInt(line[41]),
-				ai_id: parseInt(line[42]),
-				max_call_help: parseInt(line[43]),
-				monster_alignment: parseInt(line[44]),
-				idle_spell_id: parseInt(line[45]),
-				battle_spells: line[46],
-				restore_spell_id: parseInt(line[47]),
-				summon_monster_id: parseInt(line[48]),
-				summon_type: parseInt(line[49]),
-				summon_rate: parseInt(line[50]),
-				summon_max: parseInt(line[51]),
-				summon_effect_id: parseInt(line[52]),
-				exp: parseInt(line[53]),
-				shout: line[54],
-				shout_for_man: line[55],
-				shout_for_woman: line[56],
-				zone_icon: line[57],
-				locate_limit: parseInt(line[58]),
-				achievement_map: line[59],
-				auto_spell_during: line[60] === 'true',
-				auto_spell_id: parseInt(line[61]),
-				spell_shout_cmds: line[62],
-				special_flag: parseInt(line[63]),
-				lower_limit: parseInt(line[64]),
+				name: line[2],
+				level: parseInt(line[3]) || 0,
+				rank: parseInt(line[4]),
+				type: parseInt(line[5]),
+				max_hp: parseInt(line[6]),
+				max_mp: parseInt(line[7]),
+				fear_type: parseInt(line[8]),
+				part_hp: parseInt(line[9]),
+				part_breaking_action: parseInt(line[10]),
+				avg_physical_damage: parseInt(line[11]),
+				rand_physical_damage: parseInt(line[12]),
+				attack_range: parseInt(line[13]),
+				attack_speed: parseInt(line[14]),
+				attack: parseInt(line[15]),
+				physical_defence: parseInt(line[16]),
+				magic_damage: parseInt(line[17]),
+				magic_defence: parseInt(line[18]),
+				hit_rate: parseInt(line[19]),
+				dodge_rate: parseInt(line[20]),
+				physical_critical_rate: parseInt(line[21]),
+				physical_critical_damage: parseInt(line[22]),
+				magic_critical_rate: parseInt(line[23]),
+				magic_critical_damage: parseInt(line[24]),
+				physical_penetration: parseInt(line[25]),
+				magical_penetration: parseInt(line[26]),
+				physical_penetration_defence: parseInt(line[27]),
+				magical_penetration_defence: parseInt(line[28]),
+				attribute: parseInt(line[29]),
+				attribute_damage: parseInt(line[30]),
+				attribute_rate: parseInt(line[31]),
+				attribute_resist: parseInt(line[32]),
+				innate_buffs: line[33],
+				rand_buff_num: parseInt(line[34]),
+				random_buffs: line[35],
+				casting_effect_id: parseInt(line[36]),
+				roam_speed: parseInt(line[37]),
+				pursuit_speed: parseInt(line[38]),
+				move_range: parseInt(line[39]),
+				detect_range: parseInt(line[40]),
+				ai_id: parseInt(line[41]),
+				max_call_help: parseInt(line[42]),
+				monster_alignment: parseInt(line[43]),
+				idle_spell_id: parseInt(line[44]),
+				battle_spells: line[45],
+				restore_spell_id: parseInt(line[46]),
+				summon_monster_id: parseInt(line[47]),
+				summon_type: parseInt(line[48]),
+				summon_rate: parseInt(line[49]),
+				summon_max: parseInt(line[50]),
+				summon_effect_id: parseInt(line[51]),
+				exp: parseInt(line[52]),
+				shout: line[53],
+				shout_for_man: line[54],
+				shout_for_woman: line[55],
+				zone_icon: line[56],
+				locate_limit: parseInt(line[57]),
+				achievement_map: line[58],
+				auto_spell_during: line[59] === 'true',
+				auto_spell_id: parseInt(line[60]),
+				spell_shout_cmds: line[61],
+				special_flag: parseInt(line[62]),
+				lower_limit: parseInt(line[63]),
 				name_translation: {},
 				name_translation_id: "monster_name_" + line[0],
+				model_scales: null
 			};
 			if (monster.id && !isNaN(monster.id)) monsters.set(monster.id, monster);
 		}
@@ -460,11 +460,11 @@ async function refresh_db() {
 	// await storeTexts(Array.from(texts.values()), supabase);
 	// console.timeEnd("Texts loaded");
 
-	console.log("Loading items...");
-	console.time("Items loaded");
-	const items = loadItems("C_Item.ini", "T_Item.ini");
-	await storeItems(items, supabase);
-	console.timeEnd("Items loaded");
+	// console.log("Loading items...");
+	// console.time("Items loaded");
+	// const items = loadItems("C_Item.ini", "T_Item.ini");
+	// await storeItems(items, supabase);
+	// console.timeEnd("Items loaded");
 
 	// console.time("Mall Items loaded");
 	// const mall_items = loadItems("C_ItemMall.ini", "T_ItemMall.ini");
@@ -476,10 +476,10 @@ async function refresh_db() {
 	// await storeMonsters(monsters, supabase);
 	// console.timeEnd("Monsters loaded");
 
-	// console.time("Drop Items loaded");
-	// const drop_items = loadDropItems("C_DropItem.ini");
-	// await storeDropItems(drop_items, supabase);
-	// console.timeEnd("Drop Items loaded");
+	console.time("Drop Items loaded");
+	const drop_items = loadDropItems("C_DropItem.ini");
+	await storeDropItems(drop_items, supabase);
+	console.timeEnd("Drop Items loaded");
 
 }
 

@@ -24,12 +24,19 @@
 		// Change the language
 		url.pathname = `/${new_lang}${url.pathname.slice(3)}`;
 		// Redirect to the new language
-		window.location = url.toString();
+		window.location.href = url.toString();
 	};
+
+	const home = () => {
+		// Replace the location but keep the lang
+		const url = new URL(window.location.href);
+		url.pathname = `/${url.pathname.split('/')[1]}`;
+		window.location.href = url.toString();
+	}
 </script>
 
 <Navbar>
-	<NavBrand href="/">
+	<NavBrand onclick={home}>
 		<!-- <img src="/images/flowbite-svelte-icon-logo.svg" class="me-3 h-6 sm:h-9" alt="Flowbite Logo" /> -->
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Grand Fantasia Database</span>
 	</NavBrand>

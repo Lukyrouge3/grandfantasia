@@ -9,7 +9,7 @@
 	import MultiSelect from "flowbite-svelte/MultiSelect.svelte";
 	import Class from "./Class.svelte";
 
-	const {
+	let {
 		supabase, 
 		lang = 'fr', 
 		search: initial_search = "", 
@@ -81,6 +81,7 @@
 	});
 
 	const search_to_query = () => {
+		if (search != initial_search) page = 1;
 		const urlParams = new URLSearchParams({
 			q: search.trim(),
 			types: item_types.length > 0 ? item_types.join(",") : "",
