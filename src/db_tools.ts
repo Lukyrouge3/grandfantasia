@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
+import iconv from 'iconv-lite';
 
 import { maxDropItem, type DropItem, type DropItemData, type Item } from "$lib/gf/item";
 import { gfParse } from "$lib/gf/parser";
@@ -322,7 +323,7 @@ export function loadMonsters(file: string, translation: string): Map<number, Mon
 				name: line[2],
 				level: parseInt(line[3]) || 0,
 				rank: parseInt(line[4]),
-				type: parseInt(line[5]),
+				type: line[5],
 				max_hp: parseInt(line[6]),
 				max_mp: parseInt(line[7]),
 				fear_type: parseInt(line[8]),
@@ -448,6 +449,100 @@ export async function storeMonsters(monsters: Map<number, Monster>, supabase: Re
 	}
 }
 
+export type Scene = {
+	id: string;
+	name_translation_id: string;
+	monster_respawns: {id: number, monster_id: number, patrol_id: number, max_amount: number, time_to_respawn: number, x: number, y: number}[];
+}
+
+export function loadScenes() {
+	const files = fs.readdirSync("resources/scenes");
+	const scenes: Map<string, Scene> = new Map();
+
+	for (const file of files) {
+		const ini = iconv.decode(fs.readFileSync("resources/scenes/" + file), 'win1252');
+		// Skip to "[reborn_monsters]\r\n"
+		const lines = ini.split(",\r\n");
+		const scene: Scene = {
+			id: file.replace(".ini", ""),
+			name_translation_id: "scene_name_" + file.replace(".ini", ""),
+			monster_respawns: []
+		};
+		let skip_line = 0;
+		for (const line of lines) {
+			if (line == "[reborn_monsters]") break;
+			skip_line++;
+		}
+		for (let i = skip_line; i < lines.length; i++) {
+			const line = lines[i];
+			if (line == "[npc]") break;
+			const parts = line.split(",");
+			const monster_respawn = {
+				id: parseInt(parts[0]),
+				monster_id: parseInt(parts[1]),
+				patrol_id: parseInt(parts[2]),
+				max_amount: parseInt(parts[3]),
+				time_to_respawn: parseInt(parts[4]),
+				x: parseFloat(parts[5]),
+				y: parseFloat(parts[6])
+			};
+			if (monster_respawn.id) scene.monster_respawns.push(monster_respawn);
+		}
+		scenes.set(scene.id, scene);
+	}
+
+	return scenes;
+}
+
+export async function storeScenes(scenes: Map<string, Scene>, supabase: ReturnType<typeof createClient<Database>>) {
+	const fitlered_scenes = Array.from(scenes.values()).filter(i => i.monster_respawns.length > 0);
+
+	for (let i = 0; i < fitlered_scenes.length; i += 500) {
+		console.log("Storing scenes", i, "to", i + 500);
+		const fitlered_scenes_chunk = fitlered_scenes.slice(i, i + 500);
+		const scene_chunk = fitlered_scenes_chunk.map((i) => {
+			const { monster_respawns, ...other } = i;
+			return {...other};
+		});
+		const monster_respawn_chunk = fitlered_scenes_chunk.map((i, idx) => {
+			const { monster_respawns } = i;
+			return monster_respawns.map(mr => {
+				return { scene_id: i.id, ...mr };
+			});
+		}).flat();
+
+		const res = await fetch(process.env.PUBLIC_SUPABASE_URL + "/rest/v1/scene", {
+			method: "POST",
+			headers: {
+				"apikey": process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
+				"Authorization": "Bearer " + process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
+				"Content-Type": "application/json",
+				"Prefer": "resolution=merge-duplicates"
+			},
+			body: JSON.stringify(scene_chunk),
+		});
+		if (!res.ok) {
+			console.error("Failed to store scenes", await res.text());
+			return;
+		}
+
+		const res2 = await fetch(process.env.PUBLIC_SUPABASE_URL + "/rest/v1/scene_monster_respawn", {
+			method: "POST",
+			headers: {
+				"apikey": process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
+				"Authorization": "Bearer " + process.env.PRIVATE_SUPABASE_SERVICE_KEY!,
+				"Content-Type": "application/json",
+				"Prefer": "resolution=merge-duplicates"
+			},
+			body: JSON.stringify(monster_respawn_chunk),
+		});
+		if (!res2.ok) {
+			console.error("Failed to store monster respawns", await res2.text());
+			return;
+		}
+	}
+}
+
 async function refresh_db() {
 	const supabase = createClient(
 		process.env.PUBLIC_SUPABASE_URL!,
@@ -476,10 +571,15 @@ async function refresh_db() {
 	// await storeMonsters(monsters, supabase);
 	// console.timeEnd("Monsters loaded");
 
-	console.time("Drop Items loaded");
-	const drop_items = loadDropItems("C_DropItem.ini");
-	await storeDropItems(drop_items, supabase);
-	console.timeEnd("Drop Items loaded");
+	// console.time("Drop Items loaded");
+	// const drop_items = loadDropItems("C_DropItem.ini");
+	// await storeDropItems(drop_items, supabase);
+	// console.timeEnd("Drop Items loaded");
+
+	console.time("Scenes loaded");
+	const scenes = loadScenes();
+	await storeScenes(scenes, supabase);
+	console.timeEnd("Scenes loaded");
 
 }
 
