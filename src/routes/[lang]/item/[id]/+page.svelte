@@ -68,11 +68,12 @@
 					</TableHead>
 					<TableBody>
 						{#each sorted_drops as drop}
+						{@const scene = drop.monster!.scene_monster_respawn[0]}
 							<TableBodyRow>
 								<TableBodyCell><a class="underline" href="/monster/{drop.monster!.id}">{drop.monster!.name[lang]}</a></TableBodyCell>
 								<TableBodyCell>{drop.stack * drop.rand_times!}</TableBodyCell>
 								<TableBodyCell>{drop.monster!.level}</TableBodyCell>
-								<TableBodyCell>WIP</TableBodyCell>
+								<TableBodyCell><a class="underline" href="/{lang}/scene/{scene.scene_id}">{scene.name[lang]}</a></TableBodyCell>
 							</TableBodyRow>
 						{/each}
 					</TableBody>

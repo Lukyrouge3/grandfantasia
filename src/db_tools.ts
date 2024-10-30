@@ -452,6 +452,7 @@ export async function storeMonsters(monsters: Map<number, Monster>, supabase: Re
 export type Scene = {
 	id: string;
 	name_translation_id: string;
+	name_translation: Record<string, string>;
 	monster_respawns: {id: number, monster_id: number, patrol_id: number, max_amount: number, time_to_respawn: number, x: number, y: number}[];
 }
 
@@ -466,7 +467,8 @@ export function loadScenes() {
 		const scene: Scene = {
 			id: file.replace(".ini", ""),
 			name_translation_id: "scene_name_" + file.replace(".ini", ""),
-			monster_respawns: []
+			monster_respawns: [],
+			name_translation: {fr: "", en: "", es: "", pt: ""}
 		};
 		let skip_line = 0;
 		for (const line of lines) {
@@ -491,25 +493,59 @@ export function loadScenes() {
 		scenes.set(scene.id, scene);
 	}
 
+	{
+		const langs = fs.readdirSync("resources/translations");
+		for (const lang of langs) {
+			const lines = gfParse(
+				"resources/translations/" + lang + "/" + "T_Node.ini",
+			);
+			lines.shift();
+			for (const l in lines) {
+				const line = lines[l];
+				const id = line[0];
+				const scene_id = "S" + "0".repeat(3 - id.length) + id;
+				const scene = scenes.get(scene_id);
+				if (scene) {
+					scene.name_translation[lang] = line[1];
+				}
+			}
+		}
+	}
+
 	return scenes;
 }
 
 export async function storeScenes(scenes: Map<string, Scene>, supabase: ReturnType<typeof createClient<Database>>) {
 	const fitlered_scenes = Array.from(scenes.values()).filter(i => i.monster_respawns.length > 0);
+	const monsters = loadMonsters("C_Monster.ini", "T_Monster.ini");
 
-	for (let i = 0; i < fitlered_scenes.length; i += 500) {
-		console.log("Storing scenes", i, "to", i + 500);
-		const fitlered_scenes_chunk = fitlered_scenes.slice(i, i + 500);
+	for (let i = 0; i < fitlered_scenes.length; i += 10) {
+		console.log("Storing scenes", i, "to", i + 10);
+		const fitlered_scenes_chunk = fitlered_scenes.slice(i, i + 10);
+		const name_chunk = fitlered_scenes_chunk.map((i) => {
+			const { name_translation, ...other } = i;
+			return { id: i.name_translation_id, ...name_translation };
+		});
 		const scene_chunk = fitlered_scenes_chunk.map((i) => {
-			const { monster_respawns, ...other } = i;
+			const { monster_respawns, name_translation, ...other } = i;
 			return {...other};
 		});
 		const monster_respawn_chunk = fitlered_scenes_chunk.map((i, idx) => {
 			const { monster_respawns } = i;
-			return monster_respawns.map(mr => {
-				return { scene_id: i.id, ...mr };
+			return monster_respawns.filter(mr => monsters.has(mr.monster_id)).map(mr => {
+				const {id, ...other} = mr;
+				return { scene_id: i.id, ...other };
 			});
 		}).flat();
+
+		const { error: errorName, data: db_name } = await supabase.from(
+			"translation",
+		).upsert(name_chunk, { onConflict: "id" }).select();
+		if (errorName) {
+			console.log(name_chunk);
+			console.error(errorName);
+			return;
+		}
 
 		const res = await fetch(process.env.PUBLIC_SUPABASE_URL + "/rest/v1/scene", {
 			method: "POST",
@@ -522,6 +558,7 @@ export async function storeScenes(scenes: Map<string, Scene>, supabase: ReturnTy
 			body: JSON.stringify(scene_chunk),
 		});
 		if (!res.ok) {
+			console.log(scene_chunk);
 			console.error("Failed to store scenes", await res.text());
 			return;
 		}
@@ -537,6 +574,7 @@ export async function storeScenes(scenes: Map<string, Scene>, supabase: ReturnTy
 			body: JSON.stringify(monster_respawn_chunk),
 		});
 		if (!res2.ok) {
+			console.log(monster_respawn_chunk);
 			console.error("Failed to store monster respawns", await res2.text());
 			return;
 		}

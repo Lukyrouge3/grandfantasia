@@ -533,7 +533,7 @@ export type Database = {
           summon_monster_id: number | null
           summon_rate: number | null
           summon_type: number | null
-          type: number | null
+          type: string | null
           zone_icon: string | null
         }
         Insert: {
@@ -601,7 +601,7 @@ export type Database = {
           summon_monster_id?: number | null
           summon_rate?: number | null
           summon_type?: number | null
-          type?: number | null
+          type?: string | null
           zone_icon?: string | null
         }
         Update: {
@@ -669,7 +669,7 @@ export type Database = {
           summon_monster_id?: number | null
           summon_rate?: number | null
           summon_type?: number | null
-          type?: number | null
+          type?: string | null
           zone_icon?: string | null
         }
         Relationships: [
@@ -677,6 +677,74 @@ export type Database = {
             foreignKeyName: "monster_name_translation_id_fkey"
             columns: ["name_translation_id"]
             referencedRelation: "translation"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scene: {
+        Row: {
+          id: string
+          name_translation_id: string
+        }
+        Insert: {
+          id: string
+          name_translation_id: string
+        }
+        Update: {
+          id?: string
+          name_translation_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scene_name_translation_id_fkey"
+            columns: ["name_translation_id"]
+            referencedRelation: "translation"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scene_monster_respawn: {
+        Row: {
+          id: number
+          max_amount: number
+          monster_id: number
+          patrol_id: number
+          scene_id: string
+          time_to_respawn: number
+          x: number
+          y: number
+        }
+        Insert: {
+          id?: number
+          max_amount?: number
+          monster_id: number
+          patrol_id?: number
+          scene_id: string
+          time_to_respawn?: number
+          x: number
+          y: number
+        }
+        Update: {
+          id?: number
+          max_amount?: number
+          monster_id?: number
+          patrol_id?: number
+          scene_id?: string
+          time_to_respawn?: number
+          x?: number
+          y?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scene_monster_respawn_monster_id_fkey"
+            columns: ["monster_id"]
+            referencedRelation: "monster"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scene_monster_respawn_scene_id_fkey"
+            columns: ["scene_id"]
+            referencedRelation: "scene"
             referencedColumns: ["id"]
           },
         ]
