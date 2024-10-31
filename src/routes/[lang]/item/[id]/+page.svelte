@@ -79,6 +79,23 @@
 					</TableBody>
 				</Table>
 			</AccordionItem>
+			<AccordionItem>
+				<span slot="header" class="text-white">Recipes</span>
+				{#each item.recipes as recipe}
+					<div class="w-full flex flex-col gap-1 my-1 border border-gray-700 px-4 py-4">
+						{#each recipe.ingredients as ingredient}
+							<div class="flex items-center gap-2">
+								<div class="w-10 h-10 relative">
+									<img src="/itemicon/{ingredient.icon_filename}.png" alt="" class="h-8 w-8" />
+									<span class="absolute bottom-0 right-0 text-white text-sm">{ingredient.quantity}</span>
+								</div>
+								<a data-sveltekit-reload href="/{lang}/item/{ingredient.item_id}" class="text-quality-{ingredient.item_quality} underline">{ingredient.item_name![lang]}</a>
+							</div>
+						{/each}
+						<div class="text-white">Price <span>{recipe.price}</span></div>
+					</div>
+				{/each}
+			</AccordionItem>
 		</Accordion>
 	</div>
 </div>

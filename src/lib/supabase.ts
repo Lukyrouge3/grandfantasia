@@ -681,6 +681,77 @@ export type Database = {
           },
         ]
       }
+      recipe: {
+        Row: {
+          craft_type: number | null
+          elf_skill_type: number | null
+          id: number
+          max_level: number | null
+          min_level: number | null
+          price: number | null
+          result_id: number | null
+        }
+        Insert: {
+          craft_type?: number | null
+          elf_skill_type?: number | null
+          id?: number
+          max_level?: number | null
+          min_level?: number | null
+          price?: number | null
+          result_id?: number | null
+        }
+        Update: {
+          craft_type?: number | null
+          elf_skill_type?: number | null
+          id?: number
+          max_level?: number | null
+          min_level?: number | null
+          price?: number | null
+          result_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_result_id_fkey"
+            columns: ["result_id"]
+            referencedRelation: "item"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipe_ingredient: {
+        Row: {
+          id: number
+          item_id: number | null
+          quantity: number | null
+          recipe_id: number | null
+        }
+        Insert: {
+          id?: number
+          item_id?: number | null
+          quantity?: number | null
+          recipe_id?: number | null
+        }
+        Update: {
+          id?: number
+          item_id?: number | null
+          quantity?: number | null
+          recipe_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_ingredient_item_id_fkey"
+            columns: ["item_id"]
+            referencedRelation: "item"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_ingredient_recipe_id_fkey"
+            columns: ["recipe_id"]
+            referencedRelation: "recipe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scene: {
         Row: {
           id: string

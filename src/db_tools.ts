@@ -581,6 +581,88 @@ export async function storeScenes(scenes: Map<string, Scene>, supabase: ReturnTy
 	}
 }
 
+export type Recipe = {
+	id: number;
+	elf_skill_type: number;
+	craft_type: number;
+	unknown?: string;
+	min_level: number;
+	max_level: number;
+	unknown2?: string;
+	unknown3?: string;
+	unknown4?: string;
+	unknown5?: string;
+	price: number; // Let's store as bigint
+	result_id: number;
+	unknown6?: string; // Might be result quantity if > 1
+	ingredients: {item_id: number, unknown?: string, quantity: number}[]; // 3 items
+	unknown7?: string;
+	unknown8?: string;
+	unknown9?: string; // Might be probability of success (I have no clue tbh)
+	// More unknowns here
+	// TODO: figure them out 🤷‍♂️
+}
+
+export function loadRecipes() {
+	const lines = gfParse("resources/C_ElfCombine.ini");
+	lines.shift();
+	const recipes: Recipe[] = [];
+	for (const line of lines) {
+		const recipe: Recipe = {
+			id: parseInt(line[0]),
+			elf_skill_type: parseInt(line[1]),
+			craft_type: parseInt(line[2]),
+			min_level: parseInt(line[4]),
+			max_level: parseInt(line[5]),
+			price: parseInt(line[10]),
+			result_id: parseInt(line[11]),
+			ingredients: [],
+		};
+		for (let i = 0; i < 3; i++) {
+			const item_id = parseInt(line[16 + i * 3]);
+			const quantity = parseInt(line[18 + i * 3]);
+			if (item_id) recipe.ingredients.push({item_id, quantity});
+		}
+		if (recipe.id) recipes.push(recipe);
+	}
+
+	return recipes;
+}
+
+export async function storeRecipes(recipes: Recipe[], supabase: ReturnType<typeof createClient<Database>>) {
+	const items = loadItems("C_Item.ini", "T_Item.ini");
+
+	for (let i = 0; i < recipes.length; i += 500) {
+		console.log("Storing recipes", i, "to", i + 500);
+		const chunk = recipes.slice(i, i + 500);
+		const filtered_chunk = chunk.filter(r => items.find(i => i.id == r.result_id));
+
+		const recipe_chunk = filtered_chunk.map((i) => {
+			const { ingredients, ...other } = i;
+			return {...other};
+		});
+
+		const { data, error} = await supabase.from("recipe").upsert(recipe_chunk, { onConflict: "id" }).select("id");
+		if (error || !data) {
+			console.error("Failed to store recipes", error);
+			return;
+		}
+
+		const recipe_ingredient_chunk = filtered_chunk.map((i, idx) => {
+			const { ingredients } = i;
+			return ingredients.map(ing => {
+				return { recipe_id: i.id, item_id: ing.item_id, quantity: ing.quantity };
+			}).filter(ing => items.find(it => it.id === ing.item_id));
+		}).flat();
+
+		const {data: data2, error: error2} = await supabase.from("recipe_ingredient").upsert(recipe_ingredient_chunk).select("recipe_id, item_id");
+		if (error2 || !data2) {
+			console.error("Failed to store recipe ingredients", error2);
+			return;
+		}
+	}
+}
+
 async function refresh_db() {
 	const supabase = createClient(
 		process.env.PUBLIC_SUPABASE_URL!,
@@ -614,11 +696,15 @@ async function refresh_db() {
 	// await storeDropItems(drop_items, supabase);
 	// console.timeEnd("Drop Items loaded");
 
-	console.time("Scenes loaded");
-	const scenes = loadScenes();
-	await storeScenes(scenes, supabase);
-	console.timeEnd("Scenes loaded");
+	// console.time("Scenes loaded");
+	// const scenes = loadScenes();
+	// await storeScenes(scenes, supabase);
+	// console.timeEnd("Scenes loaded");
 
+	console.time("Recipes loaded");
+	const recipes = loadRecipes();
+	await storeRecipes(recipes, supabase);
+	console.timeEnd("Recipes loaded");
 }
 
 refresh_db().then(() => {
